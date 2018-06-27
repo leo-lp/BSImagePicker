@@ -54,7 +54,7 @@ class ViewController: UIViewController {
         vc.selectionFillColor = UIColor.gray
         vc.selectionStrokeColor = UIColor.yellow
         vc.selectionShadowColor = UIColor.red
-        vc.selectionTextAttributes[NSForegroundColorAttributeName] = UIColor.lightGray
+        vc.selectionTextAttributes[NSAttributedStringKey.foregroundColor] = UIColor.lightGray
         vc.cellsPerRow = {(verticalSize: UIUserInterfaceSizeClass, horizontalSize: UIUserInterfaceSizeClass) -> Int in
             switch (verticalSize, horizontalSize) {
             case (.compact, .regular): // iPhone5-6 portrait
@@ -81,31 +81,30 @@ class ViewController: UIViewController {
     }
   
     @IBAction func showImagePickerWithSelectedAssets(_ sender: UIButton) {
-        // FIXME:
-//        let allAssets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
-//        var evenAssetIds = [String]()
-//
-//        allAssets.enumerateObjects { (asset, idx, stop) -> Void in
-//          if let asset = asset as? PHAsset , idx % 2 == 0 {
-//            evenAssetIds.append(asset.localIdentifier)
-//          }
-//        }
-//      
-//        let evenAssets = PHAsset.fetchAssets(withLocalIdentifiers: evenAssetIds, options: nil)
-//      
-//        let vc = BSImagePickerViewController()
-//        vc.defaultSelections = evenAssets
-//      
-//        bs_presentImagePickerController(vc, animated: true,
-//          select: { (asset: PHAsset) -> Void in
-//            print("Selected: \(asset)")
-//          }, deselect: { (asset: PHAsset) -> Void in
-//            print("Deselected: \(asset)")
-//          }, cancel: { (assets: [PHAsset]) -> Void in
-//            print("Cancel: \(assets)")
-//          }, finish: { (assets: [PHAsset]) -> Void in
-//            print("Finish: \(assets)")
-//          }, completion: nil)
+        let allAssets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
+        var evenAssetIds = [String]()
+
+        allAssets.enumerateObjects({ (asset, idx, stop) -> Void in
+            if idx % 2 == 0 {
+                evenAssetIds.append(asset.localIdentifier)
+            }
+        })
+      
+        let evenAssets = PHAsset.fetchAssets(withLocalIdentifiers: evenAssetIds, options: nil)
+      
+        let vc = BSImagePickerViewController()
+        vc.defaultSelections = evenAssets
+      
+        bs_presentImagePickerController(vc, animated: true,
+          select: { (asset: PHAsset) -> Void in
+            print("Selected: \(asset)")
+          }, deselect: { (asset: PHAsset) -> Void in
+            print("Deselected: \(asset)")
+          }, cancel: { (assets: [PHAsset]) -> Void in
+            print("Cancel: \(assets)")
+          }, finish: { (assets: [PHAsset]) -> Void in
+            print("Finish: \(assets)")
+          }, completion: nil)
     }
 }
 

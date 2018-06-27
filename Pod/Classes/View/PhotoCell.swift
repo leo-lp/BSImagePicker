@@ -31,7 +31,7 @@ final class PhotoCell: UICollectionViewCell {
     @IBOutlet weak var selectionOverlayView: UIView!
     @IBOutlet weak var selectionView: SelectionView!
     
-    weak var asset: PHAsset?
+    @objc weak var asset: PHAsset?
     var settings: BSImagePickerSettings {
         get {
             return selectionView.settings
@@ -41,7 +41,7 @@ final class PhotoCell: UICollectionViewCell {
         }
     }
     
-    var selectionString: String {
+    @objc var selectionString: String {
         get {
             return selectionView.selectionString
         }
@@ -51,8 +51,9 @@ final class PhotoCell: UICollectionViewCell {
         }
     }
     
-    var photoSelected: Bool = false {
+    @objc var photoSelected: Bool = false {
         didSet {
+            self.updateAccessibilityLabel(photoSelected)
             let hasChanged = photoSelected != oldValue
             if UIView.areAnimationsEnabled && hasChanged {
                 UIView.animate(withDuration: TimeInterval(0.1), animations: { () -> Void in
@@ -71,6 +72,10 @@ final class PhotoCell: UICollectionViewCell {
                 updateAlpha(photoSelected)
             }
         }
+    }
+    
+    func updateAccessibilityLabel(_ selected: Bool) {
+        self.accessibilityLabel = selected ? "deselect image" : "select image"
     }
     
     fileprivate func updateAlpha(_ selected: Bool) {
